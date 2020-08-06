@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <math.h>
 #include <curand_kernel.h>
+#include <iostream>
 
 //Problem Parameters
 #define CITIES 100
@@ -65,11 +66,12 @@ int main(){
   
 		float time1;
 		cudaEvent_t start, stop;
-
+		std::cout<<"1"<<std::endl;
 		HANDLE_ERROR( cudaEventCreate(&start) );
 		HANDLE_ERROR( cudaEventCreate(&stop) );
 		HANDLE_ERROR( cudaEventRecord(start, 0) );
 		//Set blocks and threads based on number of ants
+		std::cout<<"2"<<std::endl;
 		if(ANTS<=1024)
 		{
 			BLOCKS=1;
@@ -81,23 +83,27 @@ int main(){
 			BLOCKS=ceil(ANTS/(float)THREADS);
 
 		}
+		std::cout<<"3"<<std::endl;
 		get_distances_matrix(); // Get the distances between cities from the input
+		std::cout<<"3.1"<<std::endl;
 		deviceAlloc(); // Mallocs and memcpy of the device variables
 
 		
 
 		//Set up an array of curand_states in order to build better random numbers
 		time_t t; time(&t);
+		std::cout<<"3.2"<<std::endl;
 		setup_curand_states <<< BLOCKS, THREADS >>> (state_d, (unsigned long) t , THREADS);
+		std::cout<<"3.3"<<std::endl;
 		cudaThreadSynchronize();
-
+		std::cout<<"4"<<std::endl;
 		//initialize the ants array
 		initialize_ants <<< BLOCKS, THREADS >>> (ants_d, state_d, bestdistance_d , THREADS);
 		cudaThreadSynchronize();
 
 		// Start and control the ants tours
 		move_ants();
-
+		std::cout<<"5"<<std::endl;
 		HANDLE_ERROR( cudaEventRecord(stop, 0) );
 		HANDLE_ERROR( cudaEventSynchronize(stop) );
 		HANDLE_ERROR( cudaEventElapsedTime(&time1, start, stop) );

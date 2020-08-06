@@ -1,3 +1,9 @@
+/**
+reference
+https://towardsdatascience.com/the-inspiration-of-an-ant-colony-optimization-f377568ea03f
+http://www.theprojectspot.com/tutorial-post/ant-colony-optimization-for-hackers/10
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -6,7 +12,7 @@
 
 //Problem parameters
 #define CITIES 100
-#define ANTS 2000
+#define ANTS 1
 #define MAX_DIST 100
 #define MAX_TOTAL_DISTANCE (CITIES * MAX_DIST)
 
@@ -16,7 +22,17 @@
 #define QVAL 100
 #define MAX_TOURS 50
 #define MAX_TIME (MAX_TOURS * CITIES)
-#define INIT_PHER (1.0/CITIES)
+#define INIT_PHER (1.0/CITIES) 
+
+#ifdef DEBUG
+	#define DEBUG_OUTPUT(s)  do{\
+		printf("[DEBUG] File %s line %d: ",__FILE__,__LINE__);\
+		printf(s);\
+	}while(0)
+#else
+	#define DEBUG_OUTPUT(s) 
+#endif // DEBUG
+
 
 //Global structures
 struct ant{
@@ -42,7 +58,7 @@ void get_distances_matrix(){
 
   while(scanf("%i %i %lf",&i,&j,&k) == 3){
     distances[i][j] = k;
-    hormone[i][j] = INIT_PHER;
+    hormone[i][j] = 1.0;
      // printf("i: %i, j: %i, k: %lf \n",i,j,k);
      // printf("Distance[i][j]: %lf\n", distances[i][j]);
   }
@@ -105,13 +121,13 @@ double antProduct(int from, int to){
    return (double) (( pow( hormone[from][to], ALPHA) * pow( (1.0/ distances[from][to]), BETA)));
 }
 
-int NextCity( int pos ){
+int NextCity( int pos ){  //\[p_{ij}^k = \frac{{{{[{t_{{\rm{ij}}}}]}^\alpha } \cdot {{[{n_{ij}}]}^\beta }}}{{\sum\nolimits_{l \in N_l^k} {{{[{t_{{\rm{il}}}}]}^\alpha } \cdot {{[{n_{il}}]}^\beta }} }}\]  关于这个公式的解释看论文
 	int from, to;
 	double denom = 0.0;
 
 	from = ants[pos].curCity;
 
-  for(to = 0; to < CITIES; to++){
+  	for(to = 0; to < CITIES; to++){
 		if(ants[pos].visited[to] == 0){
 			denom += antProduct( from, to );
       //printf("%lf -- denom\n", denom);
@@ -133,15 +149,15 @@ int NextCity( int pos ){
 			p = (double) antProduct(from,to)/denom;
 
 			double x =  ((double)rand()/(double)RAND_MAX); 
-      //printf("Denon: %18.50f -- X: %18.50f, p: %18.50f\n",denom, x,p);
+      		//printf("Denon: %18.50f -- X: %18.50f, p: %18.50f\n",denom, x,p);
 			if(x < p){
-        //printf("%lf -- X\n", x);
+        	//printf("%lf -- X\n", x);
 				break;
 			}
-      count--;
-      if(count == 0){
-        break;
-      }
+      		count--;
+      		if(count == 0){
+        		break;
+      		}
 		}//sleep(3);
 	}while(1);
 
@@ -151,26 +167,27 @@ int NextCity( int pos ){
 int simulate_ants(){
   int k, moving = 0; 
   
-  for(k = 0; k < ANTS; k++){ 
+  for(k = 0; k < ANTS; k++){ //对于所有的蚂蚁
     //printf("Formiga (%i)\n", k);
 	if( ants[k].pathIndex < CITIES ){ //check if all cities were visited
-		ants[k].nextCity = NextCity(k);
-		ants[k].visited[ants[k].nextCity] = 1;
-		ants[k].path[ants[k].pathIndex++] = ants[k].nextCity;
+		ants[k].nextCity = NextCity(k); // 通过概率公式计算
+		ants[k].visited[ants[k].nextCity] = 1; // 访问
+		ants[k].path[ants[k].pathIndex++] = ants[k].nextCity; // 对path修改
 
-		ants[k].tourLength += distances[ants[k].curCity][ants[k].nextCity];
+		ants[k].tourLength += distances[ants[k].curCity][ants[k].nextCity]; //计算长度
 
 		//handle last case->last city to first
 
-		if(ants[k].pathIndex == CITIES){
+		if(ants[k].pathIndex == CITIES){ // 如果是最后一个 头尾相连接
 			ants[k].tourLength += distances[ants[k].path[CITIES -1]][ants[k].path[0]];
 		}
 
 		ants[k].curCity = ants[k].nextCity;
-		moving++;
+		moving++; // 统计有多少蚂蚁进行了移动
 
 	}
-  } 
+  }
+  DEBUG_OUTPUT("simulate_ants\n");
   return moving;
 }
 
@@ -178,56 +195,65 @@ int simulate_ants(){
 void move_ants(){
   int curtime = 0;
 
-  while(curtime++ < MAX_TIME){ 
-    if( simulate_ants() == 0){
+  while(curtime++ < MAX_TIME)
+  {
+	// DEBUG_OUTPUT("move_ants_while\n");
+    if( simulate_ants() == 0)
+	{
+	  DEBUG_OUTPUT("simulate_ants() == 0\n");
       //  Updating the trails of the ants
       int from,to,i,ant;
 
-	//hormone evaporation
-	for(from = 0; from < CITIES; from++)
-		for(to = 0;to < CITIES; to++){
-			if(from!=to){
-				hormone[from][to] *=( 1.0 - RHO);
+	//hormone evaporation  这个for循环和下面这个for循环是更新信息素的公式 \[{{T}_{xy}}\leftarrow (1-\rho ){{T}_{xy}}+\sum\limits_{k}{\Delta T_{xy}^{k}}\]
+		for(from = 0; from < CITIES; from++)
+			for(to = 0;to < CITIES; to++){
+				if(from!=to){
+					hormone[from][to] *=( 1.0 - RHO);
 
-				if(hormone[from][to] < 0.0){
-					hormone[from][to] = INIT_PHER;
+					if(hormone[from][to] < 0.0){
+						hormone[from][to] = INIT_PHER; //初值
+					}
 				}
 			}
-		}
-	
+		
 
-	//add new pheromone to the trails
-	for(ant = 0; ant < ANTS; ant++)
-		for(i = 0; i < CITIES; i++){	
-			if( i < CITIES - 1 ){
-				from = ants[ant].path[i];
-				to = ants[ant].path[i+1];
+		//add new pheromone to the trails 更新所有路径上的信息素
+		for(ant = 0; ant < ANTS; ant++)
+			for(i = 0; i < CITIES; i++){	
+				if( i < CITIES - 1 ){
+					from = ants[ant].path[i];
+					to = ants[ant].path[i+1];
+				}
+				else{
+					from = ants[ant].path[i];
+					to = ants[ant].path[0];
+				}
+
+				hormone[from][to] += (QVAL/ ants[ant].tourLength); // QVAL = 100
+				hormone[to][from] = hormone[from][to];
+
 			}
-			else{
-				from = ants[ant].path[i];
-				to = ants[ant].path[0];
+		
+
+		for (from = 0; from < CITIES; from++)
+			for( to = 0; to < CITIES; to++){
+				hormone[from][to] *= RHO;
 			}
+		
 
-			hormone[from][to] += (QVAL/ ants[ant].tourLength);
-			hormone[to][from] = hormone[from][to];
 
+		if (curtime != MAX_TIME){
+			restart_ants();
+			
 		}
-	
-
-	for (from = 0; from < CITIES; from++)
-		for( to = 0; to < CITIES; to++){
-			hormone[from][to] *= RHO;
+			
 		}
-	
 
 
-      if (curtime != MAX_TIME)
-          restart_ants();
-    }
-    if(MAX_TIME%curtime == 0 )
-    {
-      printf("Best: %lf\n", bestdistance);
-  	}
+		if(MAX_TIME%curtime == 0 )
+		{
+		printf("Best: %lf\n", bestdistance);
+		}
   }
 }
 
@@ -237,19 +263,19 @@ int main()
 	 clock_t start, end;
      double cpu_time_used;
      
-     start = clock();
- printf("%i -", MAX_TOTAL_DISTANCE);
-  get_distances_matrix();
+    start = clock();
+ 	printf("%i -", MAX_TOTAL_DISTANCE);
+  	get_distances_matrix();//初始化distance数组
 
-  initialize_ants();
+  	initialize_ants(); //初始化所有的ant
   
-  srand(time(NULL));
-  printf("End - setting data; Begin -- calculations\n");
-
-  move_ants();
-
-	 end = clock();
-     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+  	srand(time(NULL));
+  	printf("End - setting data; Begin -- calculations\n");
+	DEBUG_OUTPUT("move_ants doing\n");
+  	move_ants();
+	DEBUG_OUTPUT("move_ants done\n");
+	end = clock();
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   
    printf("_________The time of execution is____________%lf",cpu_time_used);
  
