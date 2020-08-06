@@ -1,0 +1,23 @@
+Initializing mutant RNA sequences...		DONE
+Running OREGA calculations:
+	ITERATION 1
+Sequence 1:	 Score = 3.4242 	Mean Basepair Probabilty = 0.7313	Complexity = 0.778 	 Optimized Segment : CGCCUCCACC
+Sequence 2:	 Score = 2.1974 	Mean Basepair Probabilty = 0.6086	Complexity = 0.778 	 Optimized Segment : CGCCUCGACC
+Sequence 3:	 Score = 3.4242 	Mean Basepair Probabilty = 0.7313	Complexity = 0.778 	 Optimized Segment : CGCCUCCACC
+Sequence 4:	 Score = 4.7082 	Mean Basepair Probabilty = 0.8597	Complexity = 0.778 	 Optimized Segment : CGCCUCCACA
+	ITERATION 2
+Sequence 1:	 Score = 3.4242 	Mean Basepair Probabilty = 0.7313	Complexity = 0.778 	 Optimized Segment : CGCCUCCACC
+Sequence 2:	 Score = 3.4242 	Mean Basepair Probabilty = 0.7313	Complexity = 0.778 	 Optimized Segment : CGCCUCCACC
+Sequence 3:	 Score = 3.4242 	Mean Basepair Probabilty = 0.7313	Complexity = 0.778 	 Optimized Segment : CGCCUCCACC
+Sequence 4:	 Score = 2.1974 	Mean Basepair Probabilty = 0.6086	Complexity = 0.778 	 Optimized Segment : CGCCUCGACC
+	ITERATION 3
+Sequence 1:	 Score = 5.1415 	Mean Basepair Probabilty = 0.9030	Complexity = 0.778 	 Optimized Segment : UGCCUCCACC
+Sequence 2:	 Score = 5.3651 	Mean Basepair Probabilty = 0.6928	Complexity = 0.312 	 Optimized Segment : CGCCCCCACC
+Sequence 3:	 Score = 2.1974 	Mean Basepair Probabilty = 0.6086	Complexity = 0.778 	 Optimized Segment : CGCCUCGACC
+Sequence 4:	 Score = 2.0416 	Mean Basepair Probabilty = 0.5931	Complexity = 0.778 	 Optimized Segment : CGCCUCGACU
+
+Output:   
+Final Sequence 1:	 Score = 2.0416 	Mean Basepair Probabilty = 0.5931	Complexity = 0.778 	 Optimized Segment : CGCCUCGACU
+Final Sequence 2:	 Score = 2.1974 	Mean Basepair Probabilty = 0.6086	Complexity = 0.778 	 Optimized Segment : CGCCUCGACC
+Final Sequence 3:	 Score = 2.1974 	Mean Basepair Probabilty = 0.6086	Complexity = 0.778 	 Optimized Segment : CGCCUCGACC
+Final Sequence 4:	 Score = 2.1974 	Mean Basepair Probabilty = 0.6086	Complexity = 0.778 	 Optimized Segment : CGCCUCGACC

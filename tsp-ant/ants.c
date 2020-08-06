@@ -9,7 +9,6 @@ http://www.theprojectspot.com/tutorial-post/ant-colony-optimization-for-hackers/
 #include <assert.h>
 #include <math.h>
 #include <time.h>
-
 //Problem parameters
 #define CITIES 100
 #define ANTS 1

@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>RNAstructure Command Line Help: efn2</title>
+    <link href="Stylesheet.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div class="bodydiv">
+      <table class="mainTable" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr class="headerRow">
+            <td class="headerBox"><img src="icon.jpg" alt="RNAstructure logo"></td>
+            <td class="headerLabel">
+              <h2>RNAstructure Command Line Help<br>
+                orega and orega-cuda</h2>
+            </td>
+            <td class="headerBox2">
+              <ul id="navigator">
+                <li>
+                  <h3 class="noMarginOrPad"><a href="index.html">Contents</a></h3>
+                </li>
+                <li>
+                  <h3 class="noMarginOrPad"><a href="AlphabeticalIndex.html">Index</a></h3>
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td class="mainContent" colspan="3">
+              <p><span style="font-weight: bold;">orega </span>evolves an input sequence to increase end-to-end distance using a genetic algorithm.&nbsp;</p>
+              <a name="Usage" id="Usage"></a>
+              <h3>USAGE: orega &lt;input&nbsp;file&gt; &nbsp;&lt;output
+                file&gt; [options] </h3>
+              <h3 class="leftHeader">Required parameters:</h3>
+              <table>
+                <tbody>
+                  <tr>
+                    <td class="cell">&lt;input file&gt;</td>
+                    <td>The name of a <a href="File_Formats.html#Sequence">sequence
+                        file</a> containing input data. <br>
+Note that lowercase nucleotides are forced single-stranded
+                    in structure prediction. </td>
+                  </tr>
+                  <tr>
+                    <td class="cell">&lt;output file&gt;</td>
+                    <td>The name of a FASTA file to which the output will be written.</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h3 class="leftHeader">Options that do not require added values:</h3>
+              <table>
+                <tbody>
+                  <tr>
+                    <td class="cell">--nocomplexity<br>
+                    </td>
+                    <td>Use the objective function that does not include sequence complexity. The default uses an objective function that includes sequence complexity.</td>
+                  </tr>
+                  <tr>
+                    <td class="cell"><br>
+                    </td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="cell">-h&nbsp;--help</td>
+                    <td>Display the usage details message.<br>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="cell">-v&nbsp;--version<br>
+                    </td>
+                    <td>Display version and copyright information for this
+                      interface. </td>
+                  </tr>
+                </tbody>
+              </table>
+              <h3 class="leftHeader">Options that require added values:</h3>
+              <table>
+                <tbody>
+                  <tr>
+                    <td class="cell">-a, -A, --alphabet</td>
+                    <td>Specify the name of a folding alphabet and associated
+                      nearest neighbor parameters. The alphabet is the prefix
+                      for the thermodynamic parameter files, e.g. "rna" for RNA
+                      parameters or "dna" for DNA parameters or a custom
+                      extended/modified alphabet. The thermodynamic parameters
+                      need to reside in the at the location indicated by
+                      environment variable DATAPATH.<br>
+                      The default is "rna" (i.e. use RNA parameters).</td>
+                  </tr>
+                  <tr>
+                  </tr>
+                  <tr>
+                    <td height="22">&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="cell"><br>
+                    </td>
+                    <td><br>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="cell"><br>
+                    </td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="cell">&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="cell">&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="cell">&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="cell">&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h3 class="leftHeader">&nbsp;</h3>
+              <h3 class="leftHeader">Notes about alphabet size:</h3>
+              <p>The complexity calculation performed by orega assumes a 4-nucleotide alphabet (although RNAstructure can use larger alphabets to include modified nucleotides). It is important to provide a sequence that uses only the standard A, C, G, U/T nucleotide alphabet. Lowercase nucleotides are forced unpaired (as in the rest of RNAstructure), but these should only be included outside the region of sequence being evolved. Lowercase nucleotides within the evolved region will never be allowed to pair as the sequece evolves.</p>
+              <h3 class="leftHeader">Notes for cuda:</h3>
+              <p>orega-cuda is the cuda version (for execution on cuda-enabled graphics cards). The same options are used, but the cuda-enabled partition function is used in the background. This can dramatically improve runtimes.</p>
+              <h3 class="leftHeader"><a name="Refs" id="Refs">References:</a></h3>
+              <ol class="noListTopMargin">
+                <li class="gapListItem"> Lai, W. C., Kayedkhordeh, M., Cornell, E. V., Farah, E., Bellaousov, S., Rietmeijer, R., Mathews, D. H., &amp; Ermolenko, D. N.<br>
+  mRNAs and lncRNAs intrinsically form secondary structures with short end-to-end distances. <br>
+  <em>Nature Communications</em>, 9: 4328. (2018). </li>
+                <li class="gapListItem"> Reuter, J.S. and Mathews, D.H. <br>
+"RNAstructure: software for RNA secondary structure prediction
+                  and analysis." <br>
+                  <i>BMC Bioinformatics</i>, 11:129. (2010). <br>
+                </li>
+              </ol>
+            </td>
+          </tr>
+          <tr>
+            <td class="footer" colspan="3">
+              <p>Visit <a href="http://rna.urmc.rochester.edu/RNAstructure.html">The
+Mathews
+                  Lab RNAstructure Page</a> for updates and latest information.</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
